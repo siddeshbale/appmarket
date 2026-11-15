@@ -1,0 +1,4 @@
+phrase,group,platform,market,store_id,observed_day,position,search_volume,volume_unit,difficulty,source
+habit tracker,core,android,us,com.example.fictional.planner,2026-10-01,7,42,tool popularity index 5-100,,My ASO tool export (example)
+daily planner,core,android,us,,,,,,,
+to do list,secondary,,,,,,,,,

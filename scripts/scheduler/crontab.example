@@ -1,0 +1,3 @@
+# EXAMPLE ONLY — add with `crontab -e` after replacing the path. Runs daily at 07:30 local time.
+# Make sure `npm` and Node 24 are on cron's PATH (e.g. set PATH= at the top of your crontab, or use the absolute path from `which npm`).
+30 7 * * * /path/to/app-market-radar/scripts/scheduler/run-daily.sh

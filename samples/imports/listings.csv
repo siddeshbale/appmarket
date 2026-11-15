@@ -1,0 +1,3 @@
+platform,store_id,title,publisher,category_id,category_name,is_game,release_date,track
+android,com.example.fictional.planner,Example Planner (fictional),Example Labs,PRODUCTIVITY,Productivity,false,2024-03-01,true
+ios,900000999,Example Puzzle (fictional),Example Labs,7012,Puzzle,true,2025-01-15,true

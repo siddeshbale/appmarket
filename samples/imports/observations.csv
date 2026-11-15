@@ -1,0 +1,4 @@
+platform,store_id,market,observed_day,title,publisher,price,currency,rating,rating_count,install_band,version,updated_at,has_ads,has_iap,source_url,source
+android,com.example.fictional.planner,us,2026-09-01,Example Planner (fictional),Example Labs,0,USD,4.4,12034,100K+,3.1.0,2026-08-20,true,true,https://play.google.com/store/apps/details?id=com.example.fictional.planner,my notes
+android,com.example.fictional.planner,us,2026-10-01,Example Planner (fictional),Example Labs,0,USD,4.5,13410,500K+,3.2.0,2026-09-25,true,true,,my notes
+android,com.example.fictional.planner,in,2026-10-01,Example Planner (fictional),Example Labs,0,INR,4.2,5101,100K+,3.2.0,2026-09-25,true,true,,my notes

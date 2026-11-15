@@ -1,0 +1,14 @@
+node_modules/
+dist/
+dist-public/
+data/*.db
+data/*.db-*
+data/cache/
+backups/
+.env
+web/public/data/
+test-results/
+playwright-report/
+*.log
+logs/
+data-branch/

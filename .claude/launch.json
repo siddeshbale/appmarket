@@ -1,0 +1,31 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "radar-demo",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "start:demo"
+      ],
+      "port": 5174
+    },
+    {
+      "name": "radar-live",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "start"
+      ],
+      "port": 5174
+    },
+    {
+      "name": "radar-public",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "preview:public"
+      ],
+      "port": 4174
+    }
+  ]
+}

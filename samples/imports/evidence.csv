@@ -1,0 +1,4 @@
+kind,platform,store_id,channel,market,advertiser,creator,hook,format,url,first_observed,last_observed,metric_label,metric_value,metric_scope,tags,notes
+paid_ad,android,com.example.fictional.planner,meta,us,Example Labs,,"""Plan your week in 2 minutes""",video 9:16,https://example.com/ad-reference-1,2026-09-10,2026-10-01,Impressions (range shown by source),10K-50K,"US, as displayed",ugc;productivity,Fictional sample row
+organic_post,,,tiktok,us,,@example_creator,Desk setup tour mentioning the app,video,https://example.com/post-reference,2026-09-20,,,,,organic,No ad disclosure visible
+sponsorship_unverified,ios,900000999,youtube,in,,Example Channel,Mid-roll mention,integration,https://example.com/video-reference,2026-09-25,,,,,unverified,Looks sponsored; not confirmed

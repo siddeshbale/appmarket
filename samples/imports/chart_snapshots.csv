@@ -1,0 +1,4 @@
+platform,market,device,chart_type,category,category_scope,snapshot_day,rank,store_id,title,publisher,requested_depth,source
+android,us,android_phone,free,GAME_PUZZLE,category,2026-10-01,1,com.example.fictional.blocks,Example Blocks (fictional),Example Games,3,manual observation on device
+android,us,android_phone,free,GAME_PUZZLE,category,2026-10-01,2,com.example.fictional.words,Example Words (fictional),Example Games,3,manual observation on device
+android,us,android_phone,free,GAME_PUZZLE,category,2026-10-01,3,com.example.fictional.tiles,Example Tiles (fictional),Other Example Co,3,manual observation on device

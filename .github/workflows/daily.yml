@@ -1,0 +1,85 @@
+name: Daily collection and publish
+
+# Runs once a day: restores the database from the `data` branch, collects today's charts and metadata,
+# saves the sanitized database back to `data`, and publishes the read-only public site to GitHub Pages.
+on:
+  schedule:
+    - cron: '17 6 * * *' # 06:17 UTC daily (GitHub may start scheduled runs a little late)
+  workflow_dispatch: {}
+
+permissions:
+  contents: write # push the `data` branch
+  pages: write
+  id-token: write
+
+concurrency:
+  group: daily-collection
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check out data branch (if it exists)
+        id: data
+        continue-on-error: true
+        uses: actions/checkout@v4
+        with:
+          ref: data
+          path: data-branch
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - name: Restore database
+        run: npm run cloud:restore
+
+      - name: Collect (charts, metadata, registered Android packages)
+        run: npm run ingest -- --quiet || echo "::warning::Every provider failed or was restricted today; publishing the previous data."
+
+      - name: Pack sanitized database
+        run: npm run cloud:pack
+
+      - name: Save database to the data branch (single commit, latest only)
+        working-directory: data-branch
+        run: |
+          rm -rf .git
+          git init -q -b data
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add radar.db.gz README.md
+          git commit -q -m "Data as of $(date -u +%F)"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" data
+
+      - name: Keep a 30-day backup copy
+        uses: actions/upload-artifact@v4
+        with:
+          name: radar-db-${{ github.run_id }}
+          path: data-branch/radar.db.gz
+          retention-days: 30
+
+      - name: Build public site
+        run: |
+          npm run export:public
+          npm run verify:public
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist-public
+
+  deploy:
+    needs: collect
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

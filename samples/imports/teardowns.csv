@@ -1,0 +1,2 @@
+platform,store_id,version_label,observed_at,market,device,first_meaningful_action,steps_to_value,signup_friction,paywall_timing,permissions,pricing,trial_terms,evidence_url,notes
+android,com.example.fictional.planner,3.2.0,2026-10-02,us,Pixel 8,Create first task,3,Google sign-in or email; skippable,Soft paywall after first task,Notifications at step 4,$4.99/mo or $29.99/yr,7-day trial on annual,https://example.com/teardown-notes,Fictional sample row

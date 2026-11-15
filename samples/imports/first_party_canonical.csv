@@ -1,0 +1,3 @@
+platform,store_id,day,metric,value,unit,market,source
+android,com.example.fictional.planner,2026-10-01,user_installs,120,installs/day,us,Play Console (example)
+android,com.example.fictional.planner,2026-10-02,user_installs,134,installs/day,us,Play Console (example)

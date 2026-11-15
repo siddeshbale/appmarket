@@ -1,0 +1,4 @@
+[
+  { "platform": "android", "store_id": "com.example.fictional.notes", "title": "Example Notes (fictional)", "publisher": "Example Labs", "track": true },
+  { "platform": "ios", "store_id": "900000998", "title": "Example Notes iOS (fictional)", "publisher": "Example Labs", "track": true }
+]
