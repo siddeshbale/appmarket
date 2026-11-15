@@ -34,6 +34,9 @@ const NAV: [string, string, boolean][] = [
   ['/methodology', 'Methodology', false],
 ];
 
+// Pages that need the local API (writes or private data) are hidden in the public build.
+const LOCAL_ONLY = new Set(['/track', '/keywords', '/brief']);
+
 function Shell() {
   const meta = useAsync(() => api.get('/api/meta'), []);
   const m = meta.data;
@@ -54,7 +57,7 @@ function Shell() {
             App Market Radar
           </div>
           <nav className="nav" aria-label="Main">
-            {NAV.map(([to, label, group]) =>
+            {NAV.filter(([to]) => !PUBLIC_MODE || !LOCAL_ONLY.has(to)).map(([to, label, group]) =>
               group ? (
                 <div className="group" key={to}>
                   {to}

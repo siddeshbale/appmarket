@@ -61,7 +61,7 @@ function Profile({ p, from, to, range, setRange, reload }: any) {
           {!PUBLIC_MODE && (l.tracked ? <button onClick={() => track(false)}>✓ Tracked</button> : <button className="primary" onClick={() => track(true)}>Track</button>)}
           <AddToWatchlist listingId={l.id} current={p.watchlists ?? []} onDone={reload} />
           <Link className="btn" to={`/compare?ids=${l.id}`}>Compare</Link>
-          <Link className="btn" to={`/brief?ids=${l.id}`}>Brief</Link>
+          {!PUBLIC_MODE && <Link className="btn" to={`/brief?ids=${l.id}`}>Brief</Link>}
         </div>
       </div>
       <div className="grid cols-2">

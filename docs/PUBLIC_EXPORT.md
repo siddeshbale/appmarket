@@ -9,7 +9,7 @@ npm run verify:public          # checks for private keys/text, imported listings
 npm run preview:public         # http://127.0.0.1:4174
 ```
 
-Output: `dist-public/` (`index.html`, `assets/`, `data/dataset.json`, `data/README.txt`). It uses hash routing and relative paths, so it works from any sub-path.
+Output: `dist-public/` (`index.html`, `assets/`, `data/index.json` loaded first, `data/charts/*.json` and `data/listings/*.json` fetched on demand, `data/README.txt`). It uses hash routing and relative paths, so it works from any sub-path.
 
 ## What is included
 

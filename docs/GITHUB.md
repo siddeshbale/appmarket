@@ -44,7 +44,7 @@ then commit `data-branch/radar.db.gz` to the `data` branch (or ask Claude to do 
 ## Limits and caveats
 
 - **Cost:** free for public repositories (Actions minutes and Pages are free for public repos; a run takes a few minutes). Private repos get 2,000 free Actions minutes/month but GitHub Pages on a private repo requires a paid plan.
-- **Pages limits:** sites up to ~1 GB, ~100 GB/month bandwidth (soft limits; check GitHub's current docs). The dataset is ~11 MB.
+- **Pages limits:** sites up to ~1 GB, ~100 GB/month bandwidth (soft limits; check GitHub's current docs). The data is ~4 MB in total; a first visit downloads well under 0.5 MB.
 - **Inactivity:** GitHub may disable scheduled workflows in public repos after 60 days without repository activity and emails a warning; re-enable with one click in the Actions tab.
 - **Timing:** scheduled runs can start late at busy times; a day is never skipped silently — check the Actions tab.
 - **Google Play from GitHub's servers:** cloud IPs are more likely to be blocked than a home connection. If that happens, the run marks Google Play as *restricted*, Apple data continues normally, and you can disable the reader with `GOOGLE_PLAY_READER_ENABLED: 'false'` in the workflow.

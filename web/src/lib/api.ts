@@ -26,16 +26,26 @@ async function http<T>(method: string, url: string, body?: unknown): Promise<T> 
 }
 
 // ---------------- public dataset adapter ----------------
-let datasetP: Promise<any> | null = null;
-export function dataset(): Promise<any> {
-  datasetP ??= fetch('./data/dataset.json').then((r) => {
-    if (!r.ok) throw new ApiError(404, 'Public dataset missing');
-    return r.json();
-  });
-  return datasetP;
+// The public dataset is split: index.json (loaded once) + chart and listing files fetched on demand.
+const fileCache = new Map<string, Promise<any>>();
+function dataFile(rel: string, missing: string): Promise<any> {
+  let p = fileCache.get(rel);
+  if (!p) {
+    p = fetch('./data/' + rel).then((r) => {
+      if (!r.ok) throw new ApiError(404, missing);
+      return r.json();
+    });
+    p.catch(() => fileCache.delete(rel));
+    fileCache.set(rel, p);
+  }
+  return p;
 }
+export function dataset(): Promise<any> {
+  return dataFile('index.json', 'Public dataset missing');
+}
+const profileFile = (id: number | string) => dataFile('listings/' + Number(id) + '.json', 'Listing not in the public dataset');
 
-function publicGet(path: string, q: URLSearchParams, d: any): any {
+async function publicGet(path: string, q: URLSearchParams, d: any): Promise<any> {
   const listings = new Map<number, any>(d.listings.map((l: any) => [l.id, l]));
   const hydrate = (r: any) => ({ ...listings.get(r.id), ...r });
   if (path === '/api/meta')
@@ -45,7 +55,8 @@ function publicGet(path: string, q: URLSearchParams, d: any): any {
     const s = d.scopes.find((x: any) => x.market === 'us' && x.device === 'iphone' && x.chartType === 'free' && x.category === 'all') ?? d.scopes[0];
     return { scopeId: s?.id ?? null };
   }
-  const c = d.charts[q.get('scope') ?? ''];
+  const chartRel = d.chartFiles?.[q.get('scope') ?? ''];
+  const c = (path === '/api/charts' || path === '/api/movers' || path === '/api/new-to-chart') && chartRel ? await dataFile(chartRel, 'Chart not in the public dataset') : null;
   if (path === '/api/charts') {
     if (!c) return { day: null, rows: [], snapshot: null };
     let rows = c.rows.map(hydrate);
@@ -93,8 +104,7 @@ function publicGet(path: string, q: URLSearchParams, d: any): any {
   }
   const lm = path.match(/^\/api\/listings\/(\d+)$/);
   if (lm) {
-    const p = d.profiles[lm[1]];
-    if (!p) throw new ApiError(404, 'Listing not in the public dataset');
+    const p = await profileFile(lm[1]);
     return { ...p, notes: [], evidence: d.publicEvidence.filter((e: any) => e.listing_id === Number(lm[1])), teardowns: [], watchlists: [], firstParty: [], links: { store: [], search: [], adLibraries: [] } };
   }
   const pm = path.match(/^\/api\/publishers\/(\d+)$/);
@@ -107,9 +117,9 @@ function publicGet(path: string, q: URLSearchParams, d: any): any {
   throw new ApiError(405, 'Not available in the public read-only build');
 }
 
-function publicCompare(d: any, body: any) {
+async function publicCompare(body: any) {
   const days = dayRange(body.from, body.to);
-  const profiles = body.ids.map((id: number) => d.profiles[id]).filter(Boolean);
+  const profiles = (await Promise.all(body.ids.map((id: number) => profileFile(id).catch(() => null)))).filter(Boolean);
   const scopes = new Map<string, any>();
   const rankRows: any[] = [];
   for (const p of profiles)
@@ -130,12 +140,12 @@ export const api = {
   async get<T = any>(url: string): Promise<T> {
     if (PUBLIC_MODE) {
       const u = new URL(url, 'http://x');
-      return publicGet(u.pathname, u.searchParams, await dataset()) as T;
+      return (await publicGet(u.pathname, u.searchParams, await dataset())) as T;
     }
     return http<T>('GET', url);
   },
   async post<T = any>(url: string, body: unknown = {}): Promise<T> {
-    if (PUBLIC_MODE && url === '/api/compare') return publicCompare(await dataset(), body) as T;
+    if (PUBLIC_MODE && url === '/api/compare') return (await publicCompare(body)) as T;
     return http<T>('POST', url, body);
   },
   patch: <T = any>(url: string, body: unknown) => http<T>('PATCH', url, body),

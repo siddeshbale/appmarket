@@ -45,9 +45,11 @@ export default function Discover() {
           <h1>Discover</h1>
           <div className="sub">Charts, movers and the tracked catalog. Every list is scoped to one store, market, device, chart and category.</div>
         </div>
-        <Link className="btn" to="/track">
-          + Track an app by URL or ID
-        </Link>
+        {!PUBLIC_MODE && (
+          <Link className="btn" to="/track">
+            + Track an app by URL or ID
+          </Link>
+        )}
       </div>
       <div className="tabs" role="tablist">
         {TABS.map(([k, label]) => (
